@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MATCHDAY — MEMO GAME</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ========== START SCREEN ========== -->
+  <div id="start-screen" class="start-screen">
+    <div id="scene" class="scene">
+      <img src="image/Фон.png" alt="MATCHDAY Merch Store" class="background-img">
+      <button id="play-btn" class="play-btn">PLAY GAME</button>
+      <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="loading-text" id="loading-text">LOADING... 0%</div>
+        <div class="loading-bar-track">
+          <div class="loading-bar-fill" id="loading-bar-fill"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== GAME SCREEN ========== -->
+  <div id="game-screen" class="game-screen hidden">
+    <img src="image/GameScreen.png" alt="" class="game-frame">
+
+    <div class="game-inner">
+      <!-- Top bar -->
+      <div class="game-top-bar">
+        <button id="back-btn" class="back-btn">&lt;-- Back</button>
+        <div class="timer" id="timer">TIME 01:30</div>
+      </div>
+
+      <!-- Center: rules screen OR card grid -->
+      <div class="game-content">
+        <!-- Rules screen (shown first) -->
+        <div id="rules-screen" class="rules-screen">
+          <img src="image/moreCard.png" alt="" class="card-pile">
+          <div class="rules-dialog">
+            <div class="rules-header">MATCHDAY MEMO GAME</div>
+            <div class="rules-body">
+              <p>Hey player! Let's play MEMO. Match all 8 pairs to win exclusive promo codes. 3 prizes are hidden inside. Can you find them all?</p>
+              <button id="lets-play-btn" class="lets-play-btn">LET'S PLAY</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pixel loader (between rules and game) -->
+        <div id="game-loader" class="game-loader hidden">
+          <div class="pixel-spinner">
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <div class="game-loader-text">DEALING CARDS...</div>
+        </div>
+
+        <!-- Game board (hidden until LET'S PLAY) -->
+        <div id="game-board" class="game-board hidden">
+          <!-- Promo code popups -->
+          <div id="promo-1" class="promo-popup promo-left promo-top hidden">
+            <div class="promo-header">PromoCode#1</div>
+            <div class="promo-body">KICK10 — &laquo;10% off your first order&raquo;</div>
+          </div>
+          <div id="promo-2" class="promo-popup promo-right promo-mid hidden">
+            <div class="promo-header">PromoCode#2</div>
+            <div class="promo-body">MATCHDAY15 — &laquo;15% off any kit&raquo;</div>
+          </div>
+          <div id="promo-3" class="promo-popup promo-left promo-bot hidden">
+            <div class="promo-header">PromoCode#3</div>
+            <div class="promo-body">SEASON25 — &laquo;25% off sitewide. Season special.&raquo;</div>
+          </div>
+
+          <!-- 4x4 card grid -->
+          <div id="card-grid" class="card-grid"></div>
+        </div>
+      </div>
+
+      <!-- ===== END SCREENS (inside game-content) ===== -->
+
+      <!-- 1) FULL WIN: all 8 pairs -->
+      <div id="end-win" class="end-overlay hidden">
+        <div class="end-win-layout">
+          <!-- Left: congratulations -->
+          <div class="end-win-left">
+            <div class="end-dialog">
+              <div class="end-dialog-header">Congratulations!</div>
+              <div class="end-dialog-body">
+                <div class="end-title end-title--green">YOU WIN!</div>
+                <div class="end-time" id="end-win-time">Time: 01:12</div>
+                <p class="end-text">New season. New kit. MATCHDAY.<br>Use your promo codes at checkout.</p>
+                <a href="#" class="end-btn end-btn--dark" id="shop-now-btn">SHOP NOW</a>
+              </div>
+            </div>
+          </div>
+          <!-- Right: promo cards -->
+          <div class="end-win-right" id="end-win-promos">
+            <div class="prize-card" id="prize-1">
+              <div class="prize-header">Your prize #1</div>
+              <div class="prize-body">
+                <div class="prize-row">
+                  <span class="prize-code">KICK10</span>
+                  <span class="prize-desc">10% off your first order</span>
+                </div>
+                <button class="copy-btn" data-code="KICK10">Copy promo</button>
+              </div>
+            </div>
+            <div class="prize-card" id="prize-2">
+              <div class="prize-header">Your prize #2</div>
+              <div class="prize-body">
+                <div class="prize-row">
+                  <span class="prize-code">MATCHDAY</span>
+                  <span class="prize-desc">15% off any kit</span>
+                </div>
+                <button class="copy-btn" data-code="MATCHDAY15">Copy promo</button>
+              </div>
+            </div>
+            <div class="prize-card" id="prize-3">
+              <div class="prize-header">Your prize #3</div>
+              <div class="prize-body">
+                <div class="prize-row">
+                  <span class="prize-code">SEASON25</span>
+                  <span class="prize-desc">25% off. Season special.</span>
+                </div>
+                <button class="copy-btn" data-code="SEASON25">Copy promo</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2) PARTIAL WIN: some pairs found but time ran out -->
+      <div id="end-partial" class="end-overlay hidden">
+        <div class="end-win-layout">
+          <div class="end-win-left">
+            <div class="end-dialog">
+              <div class="end-dialog-header">Not bad!</div>
+              <div class="end-dialog-body">
+                <div class="end-title end-title--yellow">ALMOST!</div>
+                <div class="end-time" id="end-partial-pairs">Pairs: 4/8</div>
+                <p class="end-text">You earned some promo codes!<br>But you can win more. Try again?</p>
+                <button class="end-btn end-btn--dark" id="retry-partial-btn">RETRY</button>
+              </div>
+            </div>
+          </div>
+          <div class="end-win-right" id="end-partial-promos"></div>
+        </div>
+      </div>
+
+      <!-- 3) DEFEAT: 0 pairs -->
+      <div id="end-defeat" class="end-overlay hidden">
+        <div class="end-defeat-center">
+          <div class="end-dialog">
+            <div class="end-dialog-header">Try again!</div>
+            <div class="end-dialog-body">
+              <div class="end-title end-title--red">Defeat</div>
+              <p class="end-text">Time's up.</p>
+              <button class="end-btn end-btn--dark" id="retry-defeat-btn">Retry</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom bar -->
+      <div class="game-bottom-bar">
+        <a href="https://sirena.team/" target="_blank" rel="noopener"><img src="image/серена.png" alt="Спортс" class="logo-serena"></a>
+        <div class="copyright">copyright "MATCHDAY" company.</div>
+        <div class="pairs-counter" id="pairs-counter">PAIRS 0/8</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
