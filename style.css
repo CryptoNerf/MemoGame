@@ -4,12 +4,22 @@
   box-sizing: border-box;
 }
 
+/* English uses Pixelify Sans. Pixelify has no Cyrillic О / П and its other
+   Cyrillic letters are hard to read, so Russian switches to Tiny5. */
+:root {
+  --font-pixel: 'Pixelify Sans', sans-serif;
+}
+
+:root[lang="ru"] {
+  --font-pixel: 'Tiny5', sans-serif;
+}
+
 html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;
   background: #000;
-  font-family: 'Pixelify Sans', cursive;
+  font-family: var(--font-pixel);
 }
 
 .hidden { display: none !important; }
@@ -23,30 +33,46 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
   background: #1a1118;
+  /* the scene below sizes itself against this box (cqw / cqh) */
+  container-type: size;
 }
 
+/*
+ * The scene always covers the whole viewport (like background-size: cover)
+ * while keeping the image's 1376x768 ratio, so every % position inside it
+ * (button, loader, zoom origin) stays locked onto the arcade screen.
+ */
 .scene {
+  --scene-ratio: calc(1376 / 768);
   position: relative;
-  display: inline-flex;
-  transform-origin: 50% 51%;
+  flex: none;
+  width: max(100cqw, calc(100cqh * var(--scene-ratio)));
+  aspect-ratio: 1376 / 768;
+  container-type: inline-size;
+  /* centre of the yellow arcade screen in фондлинный.jpg */
+  transform-origin: 50.1% 57%;
   will-change: transform;
 }
 
 .background-img {
   display: block;
-  max-width: 100vw;
-  max-height: 100vh;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   image-rendering: pixelated;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 .play-btn {
   position: absolute;
-  top: 55%;
-  left: 50%;
+  top: 57%;
+  left: 50.1%;
   transform: translate(-50%, -50%);
-  font-family: 'Pixelify Sans', cursive;
-  font-size: clamp(16px, 2.8vw, 40px);
+  font-family: var(--font-pixel);
+  font-size: clamp(16px, 2.8cqw, 40px);
   font-weight: 700;
   color: #1F120E;
   background: #FEFF00;
@@ -74,10 +100,11 @@ html, body {
 /* Loading */
 .loading-overlay {
   position: absolute;
-  top: 36%;
-  left: 34%;
-  width: 32%;
-  height: 30%;
+  /* matches the yellow arcade screen in фондлинный.jpg */
+  top: 41.5%;
+  left: 36.2%;
+  width: 28%;
+  height: 31%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -87,8 +114,8 @@ html, body {
 }
 
 .loading-text {
-  font-family: 'Pixelify Sans', cursive;
-  font-size: clamp(12px, 2vw, 32px);
+  font-family: var(--font-pixel);
+  font-size: clamp(12px, 2cqw, 32px);
   font-weight: 700;
   color: #1F120E;
   letter-spacing: 1px;
@@ -96,7 +123,7 @@ html, body {
 
 .loading-bar-track {
   width: 80%;
-  height: clamp(12px, 2.5vh, 28px);
+  height: clamp(12px, 1.5cqw, 28px);
   background: #c8b800;
   border: 3px solid #1F120E;
 }
@@ -105,6 +132,52 @@ html, body {
   height: 100%;
   width: 0%;
   background: #1F120E;
+}
+
+/* ---- Language switch (EN / RU) ---- */
+.lang-switch {
+  display: inline-flex;
+  border: 3px solid #1F120E;
+  background: #FBF2BC;
+}
+
+.lang-switch button {
+  font-family: var(--font-pixel);
+  font-size: clamp(14px, 1.3vw, 20px);
+  font-weight: 700;
+  color: #1F120E;
+  background: transparent;
+  border: none;
+  padding: 0.25em 0.6em;
+  cursor: pointer;
+  letter-spacing: 1px;
+}
+
+.lang-switch button + button {
+  border-left: 3px solid #1F120E;
+}
+
+.lang-switch button[aria-pressed="true"] {
+  background: #1F120E;
+  color: #FEFF00;
+  cursor: default;
+}
+
+.lang-switch button:not([aria-pressed="true"]):hover {
+  background: #FEFF00;
+}
+
+.lang-switch--start {
+  position: absolute;
+  top: clamp(12px, 3vh, 32px);
+  right: clamp(12px, 3vw, 40px);
+  z-index: 20;
+  transition: opacity 0.3s ease;
+}
+
+.lang-switch--start.fade-out {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .white-flash {
@@ -127,7 +200,7 @@ html, body {
 .game-screen {
   position: fixed;
   inset: 0;
-  font-family: 'Pixelify Sans', cursive;
+  font-family: var(--font-pixel);
   background: #000;
 }
 
@@ -158,7 +231,7 @@ html, body {
 }
 
 .back-btn {
-  font-family: 'Pixelify Sans', cursive;
+  font-family: var(--font-pixel);
   font-size: clamp(18px, 2.2vw, 32px);
   font-weight: 700;
   color: #1F120E;
@@ -246,7 +319,7 @@ html, body {
 }
 
 .lets-play-btn {
-  font-family: 'Pixelify Sans', cursive;
+  font-family: var(--font-pixel);
   font-size: clamp(14px, 1.5vw, 22px);
   font-weight: 700;
   color: #ffffff;
@@ -293,7 +366,7 @@ html, body {
 }
 
 .game-loader-text {
-  font-family: 'Pixelify Sans', cursive;
+  font-family: var(--font-pixel);
   font-size: clamp(14px, 1.6vw, 24px);
   font-weight: 700;
   color: #1F120E;
@@ -441,6 +514,13 @@ html, body {
   justify-content: center;
   z-index: 15;
   animation: fadeIn 0.4s ease;
+  /* let clicks through to the bottom bar (logo link) */
+  pointer-events: none;
+}
+
+.end-overlay .end-dialog,
+.end-overlay .prize-card {
+  pointer-events: auto;
 }
 
 @keyframes fadeIn {
@@ -504,6 +584,7 @@ html, body {
   font-weight: 700;
   line-height: 1.1;
   margin-bottom: 8px;
+  overflow-wrap: anywhere;
 }
 
 .end-title--green {
@@ -538,7 +619,7 @@ html, body {
 
 .end-btn {
   display: inline-block;
-  font-family: 'Pixelify Sans', cursive;
+  font-family: var(--font-pixel);
   font-size: clamp(14px, 1.5vw, 24px);
   font-weight: 700;
   padding: 10px 30px;
@@ -586,7 +667,7 @@ html, body {
 
 .prize-code {
   display: inline-block;
-  font-family: 'Pixelify Sans', cursive;
+  font-family: var(--font-pixel);
   font-size: clamp(12px, 1.2vw, 20px);
   font-weight: 700;
   color: #1F120E;
@@ -603,7 +684,7 @@ html, body {
 }
 
 .copy-btn {
-  font-family: 'Pixelify Sans', cursive;
+  font-family: var(--font-pixel);
   font-size: clamp(11px, 1vw, 16px);
   font-weight: 700;
   color: #ffffff;
