@@ -1,20 +1,27 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MATCHDAY — MEMO GAME</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&family=Tiny5&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="preload" as="image" href="image/фондлинный.jpg">
+  <link rel="preload" as="image" href="image/fone.png">
 </head>
 <body>
   <!-- ========== START SCREEN ========== -->
   <div id="start-screen" class="start-screen">
+    <div class="lang-switch lang-switch--start" id="lang-switch-start" role="group" aria-label="Language">
+      <button type="button" data-lang="en">EN</button>
+      <button type="button" data-lang="ru">RU</button>
+    </div>
+
     <div id="scene" class="scene">
-      <img src="image/Фон.png" alt="MATCHDAY Merch Store" class="background-img">
-      <button id="play-btn" class="play-btn">PLAY GAME</button>
+      <img src="image/фондлинный.jpg" alt="MATCHDAY Merch Store" class="background-img">
+      <button id="play-btn" class="play-btn" data-i18n="play">PLAY GAME</button>
       <div id="loading-overlay" class="loading-overlay hidden">
         <div class="loading-text" id="loading-text">LOADING... 0%</div>
         <div class="loading-bar-track">
@@ -31,7 +38,11 @@
     <div class="game-inner">
       <!-- Top bar -->
       <div class="game-top-bar">
-        <button id="back-btn" class="back-btn">&lt;-- Back</button>
+        <button id="back-btn" class="back-btn" data-i18n="back">&lt;-- Back</button>
+        <div class="lang-switch" role="group" aria-label="Language">
+          <button type="button" data-lang="en">EN</button>
+          <button type="button" data-lang="ru">RU</button>
+        </div>
         <div class="timer" id="timer">TIME 01:30</div>
       </div>
 
@@ -43,8 +54,8 @@
           <div class="rules-dialog">
             <div class="rules-header">MATCHDAY MEMO GAME</div>
             <div class="rules-body">
-              <p>Hey player! Let's play MEMO. Match all 8 pairs to win exclusive promo codes. 3 prizes are hidden inside. Can you find them all?</p>
-              <button id="lets-play-btn" class="lets-play-btn">LET'S PLAY</button>
+              <p data-i18n="rules">Hey player! Let's play MEMO. Match all 8 pairs to win exclusive promo codes. 3 prizes are hidden inside. Can you find them all?</p>
+              <button id="lets-play-btn" class="lets-play-btn" data-i18n="letsPlay">LET'S PLAY</button>
             </div>
           </div>
         </div>
@@ -54,23 +65,23 @@
           <div class="pixel-spinner">
             <span></span><span></span><span></span><span></span>
           </div>
-          <div class="game-loader-text">DEALING CARDS...</div>
+          <div class="game-loader-text" data-i18n="dealing">DEALING CARDS...</div>
         </div>
 
         <!-- Game board (hidden until LET'S PLAY) -->
         <div id="game-board" class="game-board hidden">
           <!-- Promo code popups -->
           <div id="promo-1" class="promo-popup promo-left promo-top hidden">
-            <div class="promo-header">PromoCode#1</div>
-            <div class="promo-body">KICK10 — &laquo;10% off your first order&raquo;</div>
+            <div class="promo-header" data-i18n="promo1Header">PromoCode#1</div>
+            <div class="promo-body" data-i18n="promo1Body">KICK10 — «10% off your first order»</div>
           </div>
           <div id="promo-2" class="promo-popup promo-right promo-mid hidden">
-            <div class="promo-header">PromoCode#2</div>
-            <div class="promo-body">MATCHDAY15 — &laquo;15% off any kit&raquo;</div>
+            <div class="promo-header" data-i18n="promo2Header">PromoCode#2</div>
+            <div class="promo-body" data-i18n="promo2Body">MATCHDAY15 — «15% off any kit»</div>
           </div>
           <div id="promo-3" class="promo-popup promo-left promo-bot hidden">
-            <div class="promo-header">PromoCode#3</div>
-            <div class="promo-body">SEASON25 — &laquo;25% off sitewide. Season special.&raquo;</div>
+            <div class="promo-header" data-i18n="promo3Header">PromoCode#3</div>
+            <div class="promo-body" data-i18n="promo3Body">SEASON25 — «25% off sitewide. Season special.»</div>
           </div>
 
           <!-- 4x4 card grid -->
@@ -78,7 +89,7 @@
         </div>
       </div>
 
-      <!-- ===== END SCREENS (inside game-content) ===== -->
+      <!-- ===== END SCREENS ===== -->
 
       <!-- 1) FULL WIN: all 8 pairs -->
       <div id="end-win" class="end-overlay hidden">
@@ -86,45 +97,45 @@
           <!-- Left: congratulations -->
           <div class="end-win-left">
             <div class="end-dialog">
-              <div class="end-dialog-header">Congratulations!</div>
+              <div class="end-dialog-header" data-i18n="winHeader">Congratulations!</div>
               <div class="end-dialog-body">
-                <div class="end-title end-title--green">YOU WIN!</div>
+                <div class="end-title end-title--green" data-i18n="winTitle">YOU WIN!</div>
                 <div class="end-time" id="end-win-time">Time: 01:12</div>
-                <p class="end-text">New season. New kit. MATCHDAY.<br>Use your promo codes at checkout.</p>
-                <a href="#" class="end-btn end-btn--dark" id="shop-now-btn">SHOP NOW</a>
+                <p class="end-text" data-i18n-html="winText">New season. New kit. MATCHDAY.<br>Use your promo codes at checkout.</p>
+                <a href="#" class="end-btn end-btn--dark" id="shop-now-btn" data-i18n="shopNow">SHOP NOW</a>
               </div>
             </div>
           </div>
           <!-- Right: promo cards -->
           <div class="end-win-right" id="end-win-promos">
             <div class="prize-card" id="prize-1">
-              <div class="prize-header">Your prize #1</div>
+              <div class="prize-header" data-i18n="prize1Header">Your prize #1</div>
               <div class="prize-body">
                 <div class="prize-row">
                   <span class="prize-code">KICK10</span>
-                  <span class="prize-desc">10% off your first order</span>
+                  <span class="prize-desc" data-i18n="prize1Desc">10% off your first order</span>
                 </div>
-                <button class="copy-btn" data-code="KICK10">Copy promo</button>
+                <button class="copy-btn" data-code="KICK10" data-i18n="copy">Copy promo</button>
               </div>
             </div>
             <div class="prize-card" id="prize-2">
-              <div class="prize-header">Your prize #2</div>
+              <div class="prize-header" data-i18n="prize2Header">Your prize #2</div>
               <div class="prize-body">
                 <div class="prize-row">
-                  <span class="prize-code">MATCHDAY</span>
-                  <span class="prize-desc">15% off any kit</span>
+                  <span class="prize-code">MATCHDAY15</span>
+                  <span class="prize-desc" data-i18n="prize2Desc">15% off any kit</span>
                 </div>
-                <button class="copy-btn" data-code="MATCHDAY15">Copy promo</button>
+                <button class="copy-btn" data-code="MATCHDAY15" data-i18n="copy">Copy promo</button>
               </div>
             </div>
             <div class="prize-card" id="prize-3">
-              <div class="prize-header">Your prize #3</div>
+              <div class="prize-header" data-i18n="prize3Header">Your prize #3</div>
               <div class="prize-body">
                 <div class="prize-row">
                   <span class="prize-code">SEASON25</span>
-                  <span class="prize-desc">25% off. Season special.</span>
+                  <span class="prize-desc" data-i18n="prize3Desc">25% off. Season special.</span>
                 </div>
-                <button class="copy-btn" data-code="SEASON25">Copy promo</button>
+                <button class="copy-btn" data-code="SEASON25" data-i18n="copy">Copy promo</button>
               </div>
             </div>
           </div>
@@ -136,12 +147,12 @@
         <div class="end-win-layout">
           <div class="end-win-left">
             <div class="end-dialog">
-              <div class="end-dialog-header">Not bad!</div>
+              <div class="end-dialog-header" data-i18n="partialHeader">Not bad!</div>
               <div class="end-dialog-body">
-                <div class="end-title end-title--yellow">ALMOST!</div>
+                <div class="end-title end-title--yellow" data-i18n="partialTitle">ALMOST!</div>
                 <div class="end-time" id="end-partial-pairs">Pairs: 4/8</div>
-                <p class="end-text">You earned some promo codes!<br>But you can win more. Try again?</p>
-                <button class="end-btn end-btn--dark" id="retry-partial-btn">RETRY</button>
+                <p class="end-text" id="end-partial-text">You earned some promo codes!<br>But you can win more. Try again?</p>
+                <button class="end-btn end-btn--dark" id="retry-partial-btn" data-i18n="retryPartial">RETRY</button>
               </div>
             </div>
           </div>
@@ -153,11 +164,11 @@
       <div id="end-defeat" class="end-overlay hidden">
         <div class="end-defeat-center">
           <div class="end-dialog">
-            <div class="end-dialog-header">Try again!</div>
+            <div class="end-dialog-header" data-i18n="defeatHeader">Try again!</div>
             <div class="end-dialog-body">
-              <div class="end-title end-title--red">Defeat</div>
-              <p class="end-text">Time's up.</p>
-              <button class="end-btn end-btn--dark" id="retry-defeat-btn">Retry</button>
+              <div class="end-title end-title--red" data-i18n="defeatTitle">Defeat</div>
+              <p class="end-text" data-i18n="defeatText">Time's up.</p>
+              <button class="end-btn end-btn--dark" id="retry-defeat-btn" data-i18n="retryDefeat">Retry</button>
             </div>
           </div>
         </div>
@@ -166,7 +177,7 @@
       <!-- Bottom bar -->
       <div class="game-bottom-bar">
         <a href="https://sirena.team/" target="_blank" rel="noopener"><img src="image/серена.png" alt="Спортс" class="logo-serena"></a>
-        <div class="copyright">copyright "MATCHDAY" company.</div>
+        <div class="copyright" data-i18n="copyright">copyright "MATCHDAY" company.</div>
         <div class="pairs-counter" id="pairs-counter">PAIRS 0/8</div>
       </div>
     </div>
